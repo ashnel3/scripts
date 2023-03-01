@@ -1,2 +1,2 @@
 # scripts
-Collection of miscellaneous scripts.
+Collection of miscellaneous shell utilities.
