@@ -20,7 +20,8 @@
   "author": "ashnel3",
   "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
-    "commander": "^10.0.0"
+    "commander": "^10.0.0",
+    "execa": "^7.0.0"
   },
   "devDependencies": {
     "@swc/core": "^1.3.37",
