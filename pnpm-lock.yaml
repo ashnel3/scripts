@@ -19,7 +19,6 @@ specifiers:
   prettier: ^2.8.4
   rimraf: ^4.1.2
   swc-loader: ^0.2.3
-  terser-webpack-plugin: ^5.3.6
   ts-node: ^10.9.1
   typescript: ^4.9.5
   webpack: ^5.75.0
@@ -46,7 +45,6 @@ devDependencies:
   prettier: 2.8.4
   rimraf: 4.1.2
   swc-loader: 0.2.3_5p65lixklixow5gzx3nbknv5nm
-  terser-webpack-plugin: 5.3.6_5p65lixklixow5gzx3nbknv5nm
   ts-node: 10.9.1_a2ywtjte6hpa5hwekndsgntn44
   typescript: 4.9.5
   webpack: 5.75.0_hpyjvp47bittnpkjby5wrocq2u

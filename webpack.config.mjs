@@ -1,6 +1,5 @@
 import BannerPlugin from 'webpack/lib/BannerPlugin.js'
 import CopyPlugin from 'copy-webpack-plugin'
-import TerserPlugin from 'terser-webpack-plugin'
 
 import { join } from 'path'
 
@@ -9,6 +8,7 @@ import { join } from 'path'
  * @type {'development' | 'production'}
  */
 const mode = process.env.NODE_ENV === 'development' ? 'development' : 'production'
+const isDev = mode === 'development'
 
 /**
  * Build tool
@@ -48,14 +48,17 @@ const config = {
         test: /\.([cm]?js|ts)$/,
         use: {
           loader: 'swc-loader',
-          options: {},
+          options: {
+            jsc: {
+              minify: {
+                compress: !isDev,
+                mangle: !isDev,
+              },
+            },
+          },
         },
       },
     ],
-  },
-  optimization: {
-    minimize: mode === 'production',
-    minimizer: [new TerserPlugin({})],
   },
   plugins: [
     new BannerPlugin({
