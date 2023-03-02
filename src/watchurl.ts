@@ -19,6 +19,19 @@ const cwd = process.cwd()
 let cache: string | null = null
 
 /**
+ * Fetch text from url
+ * @param url - Page url
+ * @returns   - Page text
+ */
+const fetchText = async (url: URL): Promise<string> => {
+  const res = await fetch(url)
+  if (!res.ok) {
+    throw new Error(`[${res.status}] ${res.statusText} "${res.url}"`)
+  }
+  return await res.text()
+}
+
+/**
  * Compute checksum
  * @param input - text
  * @returns     - hash
@@ -33,14 +46,7 @@ const checksum = (input: string): string => {
  * @param opts
  */
 const run = (url: URL, opts: Partial<WatchURLOptions>): void => {
-  fetch(url)
-    .then(async (res) => {
-      if (!res.ok) {
-        throw new Error(`[${res.status}] ${res.statusText} "${res.url}"`)
-      }
-      return await res.text()
-    })
-    // Checksum text
+  fetchText(url)
     .then((text) => {
       const sum = checksum(text)
       if (cache !== sum) {
@@ -55,9 +61,6 @@ const run = (url: URL, opts: Partial<WatchURLOptions>): void => {
           execa(command, args, { cwd }).stdout?.pipe(process.stdout)
         }
       }
-    })
-    // Schedule next check
-    .then(() => {
       setTimeout(() => {
         run(url, opts)
       }, opts.interval)
