@@ -30,6 +30,7 @@ const config = {
   entry: {
     gitprofile: join(cwd, input, 'gitprofile.ts'),
     rhex: join(cwd, input, 'rhex.ts'),
+    watchurl: join(cwd, input, 'watchurl.ts')
   },
   output: {
     filename: mode === 'development' ? '[name].js' : '[name]',
@@ -41,7 +42,7 @@ const config = {
   resolve: {
     extensions: ['.ts', '.js'],
   },
-  target: ['async-node12'],
+  target: ['async-node16', 'es6'],
   module: {
     rules: [
       {
@@ -51,8 +52,9 @@ const config = {
           options: {
             jsc: {
               minify: {
-                compress: !isDev,
-                mangle: !isDev,
+                format: {
+                  comments: false,
+                },
               },
             },
           },
