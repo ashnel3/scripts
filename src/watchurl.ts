@@ -1,12 +1,10 @@
 import { Command } from 'commander'
 
-import { execa } from 'execa'
 import { createHash } from 'crypto'
 import { timeunit } from './util/cli'
 import { isMain } from './util/main'
 
 export interface WatchURLOptions {
-  exec: string
   bell: boolean
   interval: number
   quiet: boolean
@@ -56,10 +54,6 @@ const run = (url: URL, opts: Partial<WatchURLOptions>): void => {
           const date = new Date().toLocaleString()
           console.log(`Update! ${date} - "${sum}"${bell}`)
         }
-        if (typeof opts.exec === 'string') {
-          const [command, ...args] = opts.exec.split(' ')
-          execa(command, args, { cwd }).stdout?.pipe(process.stdout)
-        }
       }
       setTimeout(() => {
         run(url, opts)
@@ -80,7 +74,6 @@ if (isMain()) {
     .option('-q, --quiet', 'disable output')
     .option('-b, --bell', 'enable terminal bell')
     .option('-i, --interval <time>', 'scan interval', timeunit)
-    .option('-x, --exec <command>', 'run command')
     .action((url, opts) => {
       run(new URL(url), {
         interval: 10e3,
