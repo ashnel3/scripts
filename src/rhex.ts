@@ -34,7 +34,7 @@ const RHEX_MAX_LENGTH = !isNaN(parseInt(process.env.RHEX_MAX_LENGTH as string, 1
  * @param opts - Command-line options
  */
 export const run = (len: number, opts: Partial<RandomHexOptions>): void => {
-  console.log(randomBytes(len ?? 8).toString(opts.format ?? 'hex'))
+  console.log(randomBytes(len).toString(opts.format ?? 'hex'))
 }
 
 if (isMain()) {
@@ -44,7 +44,7 @@ if (isMain()) {
     .argument('[bytes]', 'buffer size')
     .option('-f, --format <encoding>', 'string encoding', selection(RHEX_ENCODINGS))
     .action((length, opts) => {
-      run(range(0, RHEX_MAX_LENGTH)(length), opts)
+      run(range(0, RHEX_MAX_LENGTH)(length ?? '8'), opts)
     })
     .parse()
 }
