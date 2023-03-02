@@ -21,6 +21,37 @@ const input = 'src'
 const output = 'bin'
 
 /**
+ * SWC config
+ * @type {import('@swc/core').Options}
+ */
+const swcOptions = {
+  env: {
+    targets: {
+      node: '12',
+    },
+  },
+  jsc: {
+    target: 'es2016',
+    parser: {
+      syntax: 'typescript',
+    },
+    minify: {
+      compress: true,
+      mangle: true,
+      format: {
+        comments: false,
+        shebang: true,
+      },
+    },
+  },
+  module: {
+    type: 'commonjs',
+  },
+  minify: !isDev,
+  swcrc: false,
+}
+
+/**
  * Webpack config
  * @type {import('webpack').Configuration}
  */
@@ -30,7 +61,7 @@ const config = {
   entry: {
     gitprofile: join(cwd, input, 'gitprofile.ts'),
     rhex: join(cwd, input, 'rhex.ts'),
-    watchurl: join(cwd, input, 'watchurl.ts')
+    watchurl: join(cwd, input, 'watchurl.ts'),
   },
   output: {
     filename: mode === 'development' ? '[name].js' : '[name]',
@@ -40,24 +71,16 @@ const config = {
     },
   },
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: ['.ts', '.js', '.json'],
   },
-  target: ['async-node16', 'es6'],
+  target: ['async-node12', 'es6'],
   module: {
     rules: [
       {
         test: /\.([cm]?js|ts)$/,
         use: {
           loader: 'swc-loader',
-          options: {
-            jsc: {
-              minify: {
-                format: {
-                  comments: false,
-                },
-              },
-            },
-          },
+          options: swcOptions,
         },
       },
     ],
@@ -78,5 +101,8 @@ const config = {
       ],
     }),
   ],
+  optimization: {
+    minimize: !isDev,
+  },
 }
 export default config
