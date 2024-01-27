@@ -3,8 +3,13 @@
 set -euo pipefail
 
 # Create playlist from files / directories
+# Example: mkplaylist Music/**/* playlist_name
 
-for path in "${@:2}"; do
+PLAYLIST="${!#%.*}.m3u"
+
+[[ $# -lt 1 ]] || [[ -f "$PLAYLIST" ]] \
+  && exit 1
+for path in "${@:1:$#-1}"; do
   [[ ! -d "$path" ]] \
     && realpath "$path"
-done > "${1%.*}.m3u"
+done > "$PLAYLIST"
