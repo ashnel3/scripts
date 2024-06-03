@@ -1,8 +1,2 @@
-* text=auto
-
-# Document
-*.md                   text
-*.txt                  text
-
-# Shell
-*.sh                   text eol=lf
+*                      text eol=lf
+*.ahk                  text eol=crlf
