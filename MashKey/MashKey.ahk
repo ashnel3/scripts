@@ -1,65 +1,80 @@
 ﻿#Requires AutoHotkey v2.0
 
-class Mash {
-	__New() {
-		This._Gui := Gui("-MinimizeBox", "Mash")
-		This._Timer := ""
-		This._TimerCallback := ObjBindMethod(This, "_Tick")
+class MashKeyGui extends Gui {
+  _Timer := ""
+  _TimerCallback := ObjBindMethod(this, "_Tick")
+  Running := false
+
+  __New() {
+		super.__New("-MinimizeBox", "MashKey", this)
 
 		; --- gui ---
-		This._Hotkey := This._Gui.Add("Hotkey", "y5 x4 w148 h20")
-		This._BtnStop := This._Gui.Add("Button", "+Disabled x154 y4 w40 h22", "Stop")
-		This._BtnStart := This._Gui.Add("Button", "x196 y4 w40 h22", "Start")
-		This._InputSpeed := This._Gui.Add("Edit", "x4 y28 w114 h22", "1000")
-		This._InputDuration := This._Gui.Add("Edit", "x122 y28 w114 h22", "33")
+		this._Hotkey := this.AddHotkey("y5 x4 w148 h20")
+		this._BtnStop := this.AddButton("+Disabled x154 y4 w40 h22", "Stop")
+		this._BtnStart := this.AddButton("x196 y4 w40 h22", "Start")
+		this._InputSpeed := this.AddEdit("x4 y28 w114 h22", "1000")
+		this._InputDuration := this.AddEdit("x122 y28 w114 h22", "33")
 
 		; --- events ---
-		This._BtnStop.OnEvent("click", This._Stop.Bind(This))
-		This._BtnStart.OnEvent("click", This._Start.Bind(This))
-		This._Gui.OnEvent("Close", (*) => ExitApp(0))
-	}
-
-	__Delete() {
-		This._Gui.Destroy()
+		this._BtnStop.OnEvent("click", (*) => this.Stop())
+		this._BtnStart.OnEvent("click", (*) => this.Start())
+		this.OnEvent("Close", (*) => ExitApp(0))
 	}
 
 	_Tick() {
-		key := This._Hotkey.Value or "Space"
-		dur := Integer(This._InputDuration.Value)
+		key := this._Hotkey.Value or "Space"
+		dur := Integer(this._InputDuration.Value)
 		Send("{" key " Down}")
 		Sleep(dur)
 		Send("{" key " Up}")
 	}
 
-	_Start(*) {
-		This._BtnStart.Enabled := false
-		This._BtnStop.Enabled := true
-		This._InputSpeed.Enabled := false
-		This._InputDuration.Enabled := false
-		This._Hotkey.Enabled := false
-		; --- create timer ---
-		This._Timer := SetTimer(This._TimerCallback, Integer(This._InputSpeed.Value))
+	Start() {
+    this.Running := true
+    ; disable components
+		this._BtnStart.Enabled := false
+		this._BtnStop.Enabled := true
+		this._InputSpeed.Enabled := false
+		this._InputDuration.Enabled := false
+		this._Hotkey.Enabled := false
+		; create timer
+		this._Timer := SetTimer(this._TimerCallback, Integer(this._InputSpeed.Value))
 	}
 
-	_Stop(*) {
-		This._BtnStart.Enabled := true
-		This._BtnStop.Enabled := false
-		This._InputSpeed.Enabled := true
-		This._InputDuration.Enabled := true
-		This._Hotkey.Enabled := true
-		; --- remove timer ---
-		This._Timer := SetTimer(This._TimerCallback, 0)
+	Stop() {
+    this.Running := false
+    ; renable components
+		this._BtnStart.Enabled := true
+		this._BtnStop.Enabled := false
+		this._InputSpeed.Enabled := true
+		this._InputDuration.Enabled := true
+		this._Hotkey.Enabled := true
+		; remove timer
+		this._Timer := SetTimer(this._TimerCallback, 0)
 	}
 
 	Error(msg) {
-		MsgBox(msg, "Mash - Error!", "0x30")
-	}
-
-	Run() {
-		This._Gui.Show("w240 h54")
+		MsgBox(msg, "KeyMash - Error!", "0x30")
 	}
 }
 
-; --- Main ---
-_Mash := Mash()
-_Mash.Run()
+; Main
+
+Mash := MashKeyGui()
+Mash.Show("w240 h54")
+
+f5:: {
+  if (not Mash.Running) {
+    Mash.Start()
+  }
+}
+
+f6:: {
+  if (Mash.Running) {
+    Mash.Stop()
+  }
+}
+
+f8:: {
+  ExitApp(0)
+}
