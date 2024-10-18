@@ -3,7 +3,7 @@
 set -euo pipefail
 
 [ "$#" -lt 1 ] \
-    && >&2 echo "expected a file path!" \
+    && >&2 echo "Error: expected a file path!" \
     && exit 1
 
 filepath="${1-}"
