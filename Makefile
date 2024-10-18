@@ -1,4 +1,4 @@
-OUTPUT=$(shell realpath ./build/testing)
+OUTPUT=$(shell realpath ./build)
 
 all:
 	@mkdir -p $(OUTPUT)
