@@ -1,0 +1,19 @@
+* text=auto
+
+# Document
+*.md                        text
+*.txt                       text
+
+# Config
+*.json                      text
+*.yaml                      text
+*.yml                       text
+
+# Shell
+*.sh                        text eol=lf
+*.ps1                       text eol=crlf
+Makefile*                   text eol=lf
+
+# Source
+*.ahk                       text eol=crlf
+*.py                        text
