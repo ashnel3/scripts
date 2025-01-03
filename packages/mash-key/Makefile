@@ -1,13 +1,15 @@
 OUTPUT?=./build
 INPUT=./MashKey.ahk
 
-all:
+$(OUTPUT)/mash-key.exe: $(INPUT)
 ifeq ($(OS),Windows_NT)
 	@mkdir -p $(OUTPUT)
-	@bash ../ahk2exe/ahk2exe.sh $(INPUT) -o=$(OUTPUT)/mash-key.exe
+	@bash ../ahk2exe/ahk2exe.sh $^ -o=$@
 else
 	@>&2 echo "Error: unsupported os, skipping!"
 endif
 
 start:
 	AutoHotkey $(INPUT)
+
+.PHONY: start

@@ -1,6 +1,6 @@
 OUTPUT?=./build
 INPUT=ahk2exe.sh
 
-all:
+$(OUTPUT)/ahk2exe: $(INPUT)
 	@mkdir -p "$(OUTPUT)"
-	@cp $(INPUT) "$(OUTPUT)/ahk2exe"
+	@cp $^ $@

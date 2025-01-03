@@ -1,6 +1,6 @@
 OUTPUT?=./build
 INPUT=alphabetize.py
 
-all:
+$(OUTPUT)/alphabetize: $(INPUT)
 	@mkdir -p "$(OUTPUT)"
-	@cp $(INPUT) "$(OUTPUT)/alphabetize"
+	@cp $^ $@
