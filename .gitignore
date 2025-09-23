@@ -1,0 +1,10 @@
+# Editor Files
+.idea
+.vscode
+
+# OS Files
+.DS_Store
+.directory
+
+# Generated
+build
